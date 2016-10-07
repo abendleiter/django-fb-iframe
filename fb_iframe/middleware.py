@@ -6,7 +6,9 @@ class FacebookMiddleware():
     def process_request(self, request):
 
         # Signed request found in either GET, POST or COOKIES...
-        if 'signed_request' in request.REQUEST or 'signed_request' in request.COOKIES:
+        if ('signed_request' in request.GET
+                or 'signed_request' in request.POST
+                or 'signed_request' in request.COOKIES):
             
             # If the request method is POST and its body only contains the signed request,
             # chances are it's a request from the Facebook platform and we'll override
@@ -19,7 +21,6 @@ class FacebookMiddleware():
             if request.method == 'POST' and 'signed_request' in request.POST:
                 request.POST = QueryDict('')
                 request.method = 'GET'
-
 
     def process_response(self, request, response):
         """
